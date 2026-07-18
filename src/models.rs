@@ -259,11 +259,10 @@ fn parse_hex_bytes(s: &str) -> Result<MacAddr, ParseError> {
         return Err(ParseError::InvalidLength(s.len()));
     }
     let mut bytes = [0u8; 6];
-    for i in 0..6 {
-        let start = i * 2;
-        let end = start + 2;
-        bytes[i] = u8::from_str_radix(&s[start..end], 16)
-            .map_err(|_| ParseError::InvalidCharacter(s.chars().nth(start).unwrap_or('?')))?;
+    for (i, chunk) in s.as_bytes().chunks(2).enumerate() {
+        let hex_str = std::str::from_utf8(chunk).unwrap_or("");
+        bytes[i] = u8::from_str_radix(hex_str, 16)
+            .map_err(|_| ParseError::InvalidCharacter(s.chars().nth(i * 2).unwrap_or('?')))?;
     }
     Ok(MacAddr(bytes))
 }

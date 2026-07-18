@@ -190,7 +190,7 @@ fn cmd_vendor(s: &str) {
             let cleaned: String = s.chars().filter(|&c| c != ':' && c != '-' && c != '.').collect();
             if cleaned.len() >= 6 {
                 let oui_hex = &cleaned[..6].to_uppercase();
-                if let Ok(_) = u64::from_str_radix(oui_hex, 16) {
+                if u64::from_str_radix(oui_hex, 16).is_ok() {
                     let vendor_list = macaddr::vendor::list_vendors();
                     let found = vendor_list.iter().find(|&&(k, _)| k == oui_hex);
                     match found {
@@ -211,7 +211,7 @@ fn cmd_list_vendors(search: Option<String>) {
     let vendors = vendor::list_vendors();
     match search {
         None => {
-            println!("{:<10} {}", "OUI", "Vendor");
+            println!("OUI          Vendor");
             println!("{}", "-".repeat(60));
             for (oui, name) in &vendors {
                 println!("{:<10} {}", oui, name);
@@ -224,7 +224,7 @@ fn cmd_list_vendors(search: Option<String>) {
             if filtered.is_empty() {
                 println!("No vendors matching '{}'", query);
             } else {
-                println!("{:<10} {}", "OUI", "Vendor");
+                println!("OUI          Vendor");
                 println!("{}", "-".repeat(60));
                 for (oui, name) in &filtered {
                     println!("{:<10} {}", oui, name);
