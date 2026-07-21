@@ -1,6 +1,5 @@
 use macaddr::models::MacAddr;
 use macaddr::models::MacAddrFormat;
-use std::str::FromStr;
 
 // ---- Parsing ----
 
